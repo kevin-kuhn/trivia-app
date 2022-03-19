@@ -12,6 +12,8 @@ interface ContextProps {
   userAnswares: Answare[]
   isAllAnswered: boolean
   doAnswer: (triviaId: number, response: string) => void
+	getTriviaById: (triviaId: number) => Trivia | null
+	getNextTriviaId: (currentTriviaId: number) => number
   updateTrivia: (trivia: Trivia[]) => void
 }
 
@@ -50,12 +52,22 @@ export const TriviaProvider: React.FC = ({ children }) => {
     setTrivia(trivia)
   }
 
+	const getNextTriviaId = (currentTriviaId: number) => {
+		return 1
+	}
+
+	const getTriviaById = (triviaId: number) => {
+		return trivia.find(t => t.getId() === triviaId) ?? null
+	}
+
   return (
     <TriviaContext.Provider
       value={{
         trivia,
         userAnswares,
         isAllAnswered,
+				getNextTriviaId,
+				getTriviaById,
         doAnswer,
         updateTrivia
       }}
