@@ -28,7 +28,7 @@ export const TriviaProvider: React.FC = ({ children }) => {
   const doAnswer = (triviaId: number, response: string) => {
     const triviaAnswered = trivia.find(t => t.getId() === triviaId)
 
-    if (!triviaAnswered) {
+    if (!triviaAnswered || !response) {
       return
     }
 
