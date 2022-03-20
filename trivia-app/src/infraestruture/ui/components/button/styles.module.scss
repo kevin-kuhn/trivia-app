@@ -1,0 +1,11 @@
+@use 'src/variables' as v;
+
+.button {
+	background: none;
+	color: inherit;
+	border: none;
+	font-size: 2rem;
+	outline: none;
+	cursor: pointer;
+	color: v.$color-button-action;
+}

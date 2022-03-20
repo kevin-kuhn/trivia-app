@@ -7,14 +7,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { TriviaProvider } from './infraestruture/contexts/TriviaContext'
 import { ErrorProvider } from './infraestruture/contexts/ErrorContext'
 
+import './index.scss'
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <TriviaProvider>
-        <ErrorProvider>
+      <ErrorProvider>
+        <TriviaProvider>
           <App />
-        </ErrorProvider>
-      </TriviaProvider>
+        </TriviaProvider>
+      </ErrorProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

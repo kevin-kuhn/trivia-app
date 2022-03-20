@@ -1,25 +1,23 @@
 import { createContext, useState, useContext } from 'react'
+import { GenericError } from '../../domain/types/GenericError'
 
 interface ContextProps {
-  hasError: boolean
-  message: string
-  setError: (hasError: boolean, message: string) => void
+  error: GenericError
+  setCurrentError: (error: GenericError) => void
 }
 
 const ErrorContext = createContext({} as ContextProps)
 
 // eslint-disable-next-line react/prop-types
 export const ErrorProvider: React.FC = ({ children }) => {
-  const [hasError, setHasError] = useState(false)
-  const [message, setMessage] = useState('')
+  const [error, setError] = useState<GenericError>({ hasError: false, message: '' })
 
-  const setError = (hasError: boolean, message: string) => {
-    setHasError(hasError)
-    setMessage(message)
+  const setCurrentError = (error: GenericError) => {		
+    setError(error)
   }
 
   return (
-    <ErrorContext.Provider value={{ hasError, message, setError }}>
+    <ErrorContext.Provider value={{ error, setCurrentError }}>
       {children}
     </ErrorContext.Provider>
   )

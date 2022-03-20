@@ -1,64 +1,105 @@
-import { createContext, useState, useContext } from 'react'
-import { Trivia } from '../../domain/entities/Trivia'
+import { createContext, useContext } from 'react'
+import useLocalStorage from '../hooks/useLocalStorage'
+import { TriviaService } from '../services/TriviaService'
+import { useError } from './ErrorContext'
 
 interface Answare {
-  triviaId: number
+  triviaPosition: number
   isCorrect: boolean
   description: string
 }
 
+interface ITrivia {
+  entityId: number
+  category: string
+  type: string
+  correctAnswer: string
+  difficulty: string
+  incorrectAnswers: string[]
+  question: string
+}
+
 interface ContextProps {
-  trivia: Trivia[]
+  trivia: ITrivia[]
   userAnswares: Answare[]
   isAllAnswered: boolean
-  doAnswer: (triviaId: number, response: string) => void
-	getTriviaById: (triviaId: number) => Trivia | null
-	getNextTriviaId: (currentTriviaId: number) => number
-  updateTrivia: (trivia: Trivia[]) => void
+	resetUserAnswares: () => void
+  doAnswer: (position: number, response: string) => void
+  getTriviaByPosition: (position: number) => ITrivia | null
+  updateTrivia: () => void
 }
 
 const TriviaContext = createContext({} as ContextProps)
 
 // eslint-disable-next-line react/prop-types
 export const TriviaProvider: React.FC = ({ children }) => {
-  const [trivia, setTrivia] = useState<Trivia[]>([])
-  const [userAnswares, setUserAnswares] = useState<Answare[]>([])
+  const { setCurrentError } = useError()
+
+  const [trivia, setTrivia] = useLocalStorage<ITrivia[]>('trivia', [])
+  const [userAnswares, setUserAnswares] = useLocalStorage<Answare[]>(
+    'userAnswares',
+    []
+  )
 
   const isAllAnswered =
     !!userAnswares.length && userAnswares.length === trivia.length
 
-  const doAnswer = (triviaId: number, response: string) => {
-    const triviaAnswered = trivia.find(t => t.getId() === triviaId)
+  const doAnswer = (position: number, response: string) => {
+    const triviaAnswered = trivia[position]
 
     if (!triviaAnswered || !response) {
       return
     }
 
-    const isCorrect = triviaAnswered.getCorrectAnswer() === response
+    const isCorrect =
+      triviaAnswered.correctAnswer?.toLowerCase() === response?.toLowerCase()
 
-    setUserAnswares(userAnswares => [
-      ...userAnswares.filter(
-        answare => answare.triviaId !== triviaAnswered.getId()
-      ),
+    setUserAnswares([
+      ...userAnswares.filter(t => t.triviaPosition !== position),
       {
-        triviaId,
+        triviaPosition: position,
         isCorrect,
-        description: triviaAnswered.getQuestion()
+        description: triviaAnswered.question
       }
     ])
   }
 
-  const updateTrivia = (trivia: Trivia[]) => {
-    setTrivia(trivia)
+	const resetUserAnswares = () => {
+		setUserAnswares([])
+	}
+
+  const updateTrivia = async () => {
+    const service = new TriviaService()
+    const result = await service.getTrivia()
+
+    if (result.hasError) {
+      setCurrentError({
+        hasError: true,
+        message: result.errorMessage ?? 'An error has ocurred, please try again'
+      })
+      return
+    }
+
+    setTrivia(
+      result.data.map(t => ({
+        entityId: t.getId(),
+        category: t.getCategory(),
+        type: t.getType(),
+        correctAnswer: t.getCorrectAnswer(),
+        difficulty: t.getDifficulty(),
+        incorrectAnswers: t.getIncorrectAnswers(),
+        question: t.getQuestion()
+			}))
+    )
+    setCurrentError({
+      hasError: false,
+      message: ''
+    })
   }
 
-	const getNextTriviaId = (currentTriviaId: number) => {
-		return 1
-	}
-
-	const getTriviaById = (triviaId: number) => {
-		return trivia.find(t => t.getId() === triviaId) ?? null
-	}
+  const getTriviaByPosition = (position: number) => {
+    return trivia[position] ?? null
+  }
 
   return (
     <TriviaContext.Provider
@@ -66,8 +107,8 @@ export const TriviaProvider: React.FC = ({ children }) => {
         trivia,
         userAnswares,
         isAllAnswered,
-				getNextTriviaId,
-				getTriviaById,
+        getTriviaByPosition,
+				resetUserAnswares,
         doAnswer,
         updateTrivia
       }}

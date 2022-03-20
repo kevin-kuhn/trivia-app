@@ -1,0 +1,31 @@
+@use 'src/variables' as v;
+
+.section {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+	font-weight: bold;
+	text-align: start;
+
+  display: flex;
+
+	.icon {
+		display: flex;
+		justify-content: center;
+		padding: 0 0.5rem;
+	}
+
+	.correct {
+		display: flex;
+		gap: 1rem;
+		padding: 1rem 0;
+		color: v.$color-success;
+  }
+
+	.wrong {
+		display: flex;
+		gap: 1rem;
+		padding: 1rem 0;
+		color: v.$color-error;
+  }	
+}

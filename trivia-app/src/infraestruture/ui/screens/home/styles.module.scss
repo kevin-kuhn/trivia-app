@@ -1,0 +1,14 @@
+@use 'src/variables' as v;
+
+.textWrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+
+	p {
+		font-size: 2rem;
+		margin: 5rem 0;
+    color: v.$color-text;
+		text-align: center;
+	}
+}

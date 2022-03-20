@@ -1,0 +1,33 @@
+@use 'src/variables' as v;
+
+.section {
+  display: flex;
+	height: 100%;
+	align-items: center;
+	justify-content: center;
+  flex-direction: column;
+
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 50%;
+    border: 1px solid v.$color-text;
+    box-sizing: border-box;
+    padding: 2rem;
+
+    .p {
+      font-size: 2rem;
+      color: v.$color-text;
+      text-align: center;
+    }
+  }
+
+  .counter {
+    text-align: center;
+    font-size: 2rem;
+		padding: 1.5rem 0;
+  }
+}
