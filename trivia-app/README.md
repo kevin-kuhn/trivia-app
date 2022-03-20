@@ -4,6 +4,9 @@
 
 Trivia Challange App was developed focusing in hexagonal arquiteture and DDD.
 
+`yarn install` -> install dependencies
+`yarn dev` -> run development mode
+
 ### Available scripts
 
 In the project directory, you can run:
