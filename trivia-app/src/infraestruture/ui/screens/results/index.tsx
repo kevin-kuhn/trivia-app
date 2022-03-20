@@ -47,7 +47,7 @@ const ResultsScreen: React.FC = () => {
     <Layout
       title={`You scored <br/>${
         userAnswares.filter(({ isCorrect }) => isCorrect).length
-      } out of 10`}
+      } out of ${trivia.length}`}
       actionButton={<Button onClick={handlePlayAgain}>PLAY AGAIN?</Button>}
     >
       <section className={styles.section}>

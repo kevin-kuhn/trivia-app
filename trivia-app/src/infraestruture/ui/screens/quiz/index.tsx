@@ -10,7 +10,7 @@ import styles from './styles.module.scss'
 
 const QuizScreen: React.FC = () => {
   const { position } = useParams()
-  const { getTriviaByPosition, doAnswer } = useTrivia()
+  const { getTriviaByPosition, doAnswer, trivia } = useTrivia()
 
   const navigate = useNavigate()
 
@@ -60,7 +60,7 @@ const QuizScreen: React.FC = () => {
             }}
           />
         </div>
-        <p className={styles.counter}>{Number(position) + 1} of 10</p>
+        <p className={styles.counter}>{Number(position) + 1} of {trivia.length}</p>
       </section>
     </Layout>
   )
