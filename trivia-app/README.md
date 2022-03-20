@@ -1,7 +1,4 @@
-<br />
-<div align="center">
-	<h3 align="center">Trivia App</h3>
-</div>
+## Trivia App
 
 ## About The Project
 
